@@ -7,7 +7,7 @@ on:
 
 env:
   AWS_REGION: eu-central-1
-  ECR_REPOSITORY: ecs-live-stream
+  ECR_REPOSITORY: live-streaming-app
   ECS_SERVICE: live-stream-ecs-cluster-task
   ECS_CLUSTER: talknow-live-stream
   ECS_TASK_DEFINITION: .aws/prod-task-definition.json
