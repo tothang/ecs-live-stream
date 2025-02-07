@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+# Debugging: Print all environment variables
+echo "Checking environment variables..."
+env | grep -E 'STREAM_URL|TWITCH_KEY'
+
 # Ensure required environment variables are set
 if [[ -z "$STREAM_URL" || -z "$TWITCH_KEY" ]]; then
   echo "Error: STREAM_URL or TWITCH_KEY is not set!"
