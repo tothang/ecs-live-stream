@@ -14,4 +14,5 @@ ffmpeg -re -i "$STREAM_URL" \
   -c:a aac -b:a 320k -ar 48000 \
   -pix_fmt yuv420p -g 60 -keyint_min 30 -sc_threshold 0 \
   -x264opts "nal-hrd=cbr:force-cfr=1" \
+  -vsync 1 -video_track_timescale 90000 \
   -f flv "rtmp://live.twitch.tv/app/$TWITCH_KEY"
