@@ -20,6 +20,8 @@ while true; do
     pkill -9 ffmpeg || true  # Kill any existing ffmpeg process
 
     ffmpeg -re -i "$STREAM_URL" \
+      -i https://1361694720.rsc.cdn77.org/logo/logo-talknow.png \
+      -filter_complex "[0:v][1:v] overlay=10:10" \
       -c:v libx264 -preset veryfast -b:v 3000k -maxrate 3000k -bufsize 6000k \
       -c:a aac -b:a 128k -ar 44100 \
       -f flv "rtmp://live.twitch.tv/app/$TWITCH_KEY" \
