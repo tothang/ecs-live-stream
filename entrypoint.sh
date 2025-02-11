@@ -12,21 +12,26 @@ fi
 echo "Starting FFmpeg streaming..."
 
 while true; do
-  echo "Killing any previous FFmpeg instances..."
-  pkill -9 ffmpeg || true  # Kill any existing ffmpeg process
+  echo "Checking if Twitch is receiving the stream..."
 
-  echo "Starting FFmpeg..."
-  ffmpeg -re -i "$STREAM_URL" \
-    -c:v libx264 -preset veryfast -b:v 3000k -maxrate 3000k -bufsize 6000k \
-    -c:a aac -b:a 128k -ar 44100 \
-    -f flv "rtmp://live.twitch.tv/app/$TWITCH_KEY" \
-    -rtmp_live persist \
-    -loglevel error &
+  if ! ffprobe -i "rtmp://live.twitch.tv/app/$TWITCH_KEY" -show_streams -loglevel error > /dev/null 2>&1; then
+    echo "Twitch stream is down. Restarting FFmpeg..."
 
-  pid=$!
-  echo "FFmpeg started with PID: $pid"
+    pkill -9 ffmpeg || true  # Kill any existing ffmpeg process
 
-  wait $pid
-  echo "FFmpeg stopped. Restarting in 15 seconds..."
-  sleep 15
+    ffmpeg -re -i "$STREAM_URL" \
+      -c:v libx264 -preset veryfast -b:v 3000k -maxrate 3000k -bufsize 6000k \
+      -c:a aac -b:a 128k -ar 44100 \
+      -f flv "rtmp://live.twitch.tv/app/$TWITCH_KEY" \
+      -rtmp_live persist \
+      -loglevel error &
+
+    pid=$!
+    echo "FFmpeg started with PID: $pid"
+    wait $pid
+  else
+    echo "Twitch is live. Checking again in 30 seconds..."
+  fi
+
+  sleep 30
 done
