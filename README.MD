@@ -7,6 +7,6 @@ This document provides a step-by-step guide to create a live stream from AWS Med
  Make sure you have a hls stream link
 ### Step 2: Create a channel on Twitch
 Create a channel on Twitch and get the stream key
-
+### Step 3: push code to main branch and release. Github action will run AWS fargate and deliver stream to twitch
 
 
